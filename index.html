@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jazz Improvisation Trainer G/F - Neon Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <h1>Jazz Impro <span class="neon-text">Neon</span></h1>
+            <div id="app-status" class="status-waiting">Esperando Micrófono...</div>
+        </header>
+        
+        <div class="canvas-wrapper">
+            <canvas id="canvas-musica" width="1000" height="600"></canvas>
+        </div>
+        
+        <div class="controls-feedback-container">
+            <div class="panel-control">
+                <button id="btn-start" class="btn-glow-blue">1. Activar Micrófono</button>
+                <!-- NUEVO BOTÓN: Quitar Micrófono -->
+                <button id="btn-stop" class="btn-glow-red" disabled>2. Quitar Micrófono</button>
+                <button id="btn-new-lick" class="btn-glow-orange">3. Nueva Frase (Espacio)</button>
+            </div>
+
+            <div class="panel-feedback">
+                <div class="feedback-item">
+                    <div class="label">Tu Nota (Azul):</div>
+                    <div class="value"><span id="freq-hz">0.0</span> Hz <span id="nota-detectada" class="user-note">[ --- ]</span></div>
+                </div>
+                <div class="feedback-item">
+                    <div class="label">Objetivo (Naranja):</div>
+                    <div class="value target-note"><span id="nota-buscada-label">[ Do4 ]</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
