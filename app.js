@@ -1,7 +1,83 @@
-// --- DATOS MUSICALES (Mapeo G/F Extendida) ---
+// =========================================================
+// --- DATOS DE PROGRESIONES DE JAZZ (Integración JSON) ---
+// =========================================================
+const DATOS_IMPRO_JAZZ = {
+    "titulo": "Progresiones de Jazz para Improvisación Neon",
+    "progresiones": [
+      {
+        "id": "ii_V_I_major",
+        "nombre": "ii-V-I Mayor (Bebop Cell)",
+        "analisis": "ii7 - V7 - Imaj7",
+        "ejemplos": [
+          {
+            "tono": "C",
+            "estructura_canvas": [
+              {"compas": 1, "acorde": "Dm7", "escala_sugerida": "Re Dórico"},
+              {"compas": 2, "acorde": "G7", "escala_sugerida": "Sol Mixolidio / Sol Alterado"},
+              {"compas": 3, "acorde": "Cmaj7", "escala_sugerida": "Do Jónico / Do Lidio"}
+            ]
+          },
+          {
+            "tono": "Bb",
+            "estructura_canvas": [
+              {"compas": 1, "acorde": "Cm7", "escala_sugerida": "Do Dórico"},
+              {"compas": 2, "acorde": "F7", "escala_sugerida": "Fa Mixolidio / Fa Lidio b7"},
+              {"compas": 3, "acorde": "Bbmaj7", "escala_sugerida": "Sib Jónico"}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sub_v_i",
+        "nombre": "Sustitución Tritonal (Sub V-I)",
+        "analisis": "bII7 - Imaj7",
+        "ejemplos": [
+          {
+            "tono": "C",
+            "estructura_canvas": [
+              {"compas": 1, "acorde": "Db7", "escala_sugerida": "Reb Mixolidio / Reb Lidio b7"},
+              {"compas": 2, "acorde": "Cmaj7", "escala_sugerida": "Do Jónico"}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "modal_vamp_dorian",
+        "nombre": "Vamp Modal Dórico (estilo So What)",
+        "analisis": "im7 - iim7 (repetitivo)",
+        "ejemplos": [
+          {
+            "tono": "Dm Dórico",
+            "estructura_canvas": [
+              {"compas": 1, "acorde": "Dm7", "escala_sugerida": "Re Dórico (Tono base)"},
+              {"compas": 2, "acorde": "Em7", "escala_sugerida": "Re Dórico (Color)"},
+              {"compas": 3, "acorde": "Dm7", "escala_sugerida": "Re Dórico"},
+              {"compas": 4, "acorde": "Em7", "escala_sugerida": "Re Dórico"}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ii_V_I_minor",
+        "nombre": "ii-V-I Menor (Tonalidad Cm)",
+        "analisis": "iiø7 - V7(alt) - imaj7",
+        "ejemplos": [
+          {
+            "tono": "Cm",
+            "estructura_canvas": [
+              {"compas": 1, "acorde": "Dø7", "escala_sugerida": "Re Locrio #2"},
+              {"compas": 2, "acorde": "G7alt", "escala_sugerida": "Sol Alterada / Sol Frigio Dom"},
+              {"compas": 3, "acorde": "Cm(maj7)", "escala_sugerida": "Do Menor Melódica"}
+            ]
+          }
+        ]
+      }
+    ]
+};
+
+// --- DATOS MUSICALES DE NOTAS (Mismo Mapeo Extendida G/F) ---
 const FRECUENCIAS_NOTAS = {
-    'Do2': 65.41, 'Re2': 73.42, 'Mi2': 82.41, 'Fa2': 87.31,
-    'Sol2': 98.00, 'La2': 110.00, 'Si2': 123.47,
+    'Do2': 65.41, 'Re2': 73.42, 'Mi2': 82.41, 'Fa2': 87.31, 'Sol2': 98.00, 'La2': 110.00, 'Si2': 123.47,
     'Do3': 130.81, 'Re3': 146.83, 'Mib3': 155.56, 'Mi3': 164.81, 'Fa3': 174.61, 'Solb3': 185.00, 'Sol3': 196.00, 'Lab3': 207.65, 'La3': 220.00, 'Sib3': 233.08, 'Si3': 246.94,
     'Do4': 261.63, 'Re4': 293.66, 'Mib4': 311.13, 'Mi4': 329.63, 'Fa4': 349.23, 'Solb4': 370.00, 'Sol4': 392.00,
     'Lab4': 415.30, 'La4': 440.00, 'Sib4': 466.16, 'Si4': 493.88,
@@ -49,7 +125,7 @@ const DATOS_GRAFICOS = {
     'Do2':  {y: 440, clef: 'F', ledger: true,  alt: ''},
 };
 
-const POOL_NOTAS_JAZZ = [
+const POOL_NOTAS_LIGADAS = [
     'Do2', 'Fa2', 'Do3', 'Mib3', 'Fa3', 'Solb3', 'Sol3', 'Sib3', 
     'Do4', 'Mib4', 'Fa4', 'Solb4', 'Sol4', 'Sib4', 'Do5', 'Mib5', 'Sol5'
 ];
@@ -60,6 +136,7 @@ const COLOR_FUTURE = '#888';    // Notas futuras gris
 const COLOR_PLAYED = '#0f0';    // Tocada Verde Neón
 const COLOR_TARGET = '#ff9f43';  // Objetivo Naranja Neón
 const COLOR_USER = '#00bfff';    // Usuario Azul Neón
+const COLOR_IMPRO = '#bf55ec';  // Improvisación Púrpura
 
 // --- VARIABLES DE ESTADO Y UI ---
 const canvas = document.getElementById('canvas-musica');
@@ -67,10 +144,18 @@ const ctx = canvas.getContext('2d');
 const btnStart = document.getElementById('btn-start');
 const btnStop = document.getElementById('btn-stop');
 const btnNewLick = document.getElementById('btn-new-lick');
+const btnImpro = document.getElementById('btn-impro');
 const statusLabel = document.getElementById('app-status');
 const freqLabel = document.getElementById('freq-hz');
 const detectedNoteLabel = document.getElementById('nota-detectada');
 const targetNoteLabel = document.getElementById('nota-buscada-label');
+
+// Paneles de feedback dinámicos
+const panelGame = document.getElementById('game-info');
+const panelImpro = document.getElementById('impro-info');
+const labelProgImpro = document.getElementById('nombre-progresion');
+const labelClaveImpro = document.getElementById('clave-progresion');
+const labelEscalaImpro = document.getElementById('escala-sugerida');
 
 let audioContext;
 let analyser;
@@ -78,17 +163,19 @@ let micStream;
 let javascriptNode;
 let uiUpdateInterval; 
 
+// Estado del Juego
+let modoImproCambios = false;
 let lickActual = [];
 let indiceNotaObjetivo = 0;
 let detectedFrequency = 0;
 let detectedNoteName = null;
 let cooldownTicks = 0; 
 
-// NUEVAS VARIABLES DE ESTADO PARA LA FINALIZACIÓN
-let lickCompletado = false;
-let ticksDelayCompletado = 0; // Tiempo de espera antes de la siguiente frase
+// Estado de Improvisación
+let progresionActual = null;
+let ejemploActual = null;
 
-// --- ALGORITMO DE DETECCIÓN DE TONO (AUTOCORRELACIÓN) ---
+// --- ALGORITMO DE DETECCIÓN DE TONO ---
 function autoCorrelate(buf, sampleRate) {
     let SIZE = buf.length;
     let MAX_SAMPLES = Math.floor(SIZE/2);
@@ -144,7 +231,6 @@ async function iniciarMicrofono() {
             }
         };
         uiUpdateInterval = setInterval(() => {
-            if (lickCompletado) return; // No actualizar texto si ya completó
             if (detectedNoteName) {
                 freqLabel.innerText = detectedFrequency.toFixed(1);
                 detectedNoteLabel.innerText = `[ ${detectedNoteName} ]`;
@@ -174,7 +260,6 @@ async function detenerMicrofono() {
     if (uiUpdateInterval) { clearInterval(uiUpdateInterval); uiUpdateInterval = null; }
     detectedFrequency = 0;
     detectedNoteName = null;
-    lickCompletado = false; // Reset estado juego
     freqLabel.innerText = "0.0";
     detectedNoteLabel.innerText = `[ --- ]`;
     statusLabel.innerText = "Esperando Micrófono...";
@@ -225,32 +310,11 @@ function dibujarLick() {
         let y = datos.y;
         let color;
         let glow = false;
-
-        // LÓGICA DE COLOR ACTUALIZADA PARA FINALIZACIÓN
-        if (lickCompletado) {
-            // TODAS LAS NOTAS BRILLAN EN VERDE AL FINALIZAR
-            color = COLOR_PLAYED;
-            glow = true;
-        } else if (i < indiceNotaObjetivo) {
-            // NOTAS YA TOCADAS CORRECTAMENTE (VERDE FIJO)
-            color = COLOR_PLAYED;
-            glow = false; 
-        } else if (i === indiceNotaObjetivo) {
-            // NOTA OBJETIVO ACTUAL (NARANJA BRILLANTE)
-            color = COLOR_TARGET;
-            glow = true;
-        } else {
-            // NOTAS FUTURAS (GRIS)
-            color = COLOR_FUTURE;
-            glow = false;
-        }
-
+        if (i < indiceNotaObjetivo) { color = COLOR_PLAYED; } 
+        else if (i === indiceNotaObjetivo) { color = COLOR_TARGET; glow = true; } 
+        else { color = COLOR_FUTURE; }
         ctx.fillStyle = color; ctx.strokeStyle = color; ctx.lineWidth = glow ? 3 : 2;
-        if (glow) { 
-            // EL BRILLO NARANJA ES MÁS DIFUSO, EL VERDE FINAL MÁS INTENSO
-            ctx.shadowBlur = lickCompletado ? 20 : 15; 
-            ctx.shadowColor = color; 
-        } 
+        if (glow) { ctx.shadowBlur = 15; ctx.shadowColor = COLOR_TARGET; } 
         else { ctx.shadowBlur = 0; }
         ctx.beginPath(); ctx.ellipse(x, y, 15, 10, 0, 0, 2 * Math.PI); ctx.fill();
         ctx.shadowBlur = 0; 
@@ -268,56 +332,177 @@ function dibujarLick() {
     }
 }
 
-function dibujarMarcadorUsuario() {
-    // NO DIBUJAR EL MARCADOR AZUL SI LA FRASE ESTÁ COMPLETADA (ESTAMOS EN PAUSA)
-    if (lickCompletado) return;
+function dibujarCambiosJazz() {
+    if (!ejemploActual) return;
+    
+    const estructura = ejemploActual.estructura_canvas;
+    const numCompases = estructura.length;
+    
+    let margenIzca = 150; 
+    let endX = canvas.width - 50;
+    let anchoTotal = endX - margenIzca;
+    let anchoCompas = anchoTotal / numCompases;
 
+    ctx.strokeStyle = COLOR_IMPRO; 
+    ctx.lineWidth = 3;
+    ctx.fillStyle = '#fff'; 
+    ctx.font = 'bold 35px Arial';
+    ctx.textBaseline = 'bottom';
+
+    for (let i = 0; i < numCompases; i++) {
+        let xCompas = margenIzca + (i * anchoCompas);
+        let infoCompas = estructura[i];
+        
+        ctx.beginPath();
+        ctx.moveTo(xCompas, 180); 
+        ctx.lineTo(xCompas, 420); 
+        ctx.stroke();
+
+        let nombreAcorde = infoCompas.acorde;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = COLOR_IMPRO;
+        ctx.fillText(nombreAcorde, xCompas + 15, 180); 
+        ctx.shadowBlur = 0; 
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(endX, 180); ctx.lineTo(endX, 420);
+    ctx.stroke();
+}
+
+// --- FUNCIÓN MODIFICADA: Dibujar la nota real del usuario como una nota completa ---
+function dibujarMarcadorUsuario() {
+    // Solo dibujar si el micrófono está detectando una nota válida
     if (detectedNoteName && DATOS_GRAFICOS[detectedNoteName]) {
-        let datos = DATOS_GRAFICOS[detectedNoteName];
-        let y = datos.y;
+        const datos = DATOS_GRAFICOS[detectedNoteName];
+        const y = datos.y;
+        
+        // --- Calcular Posición Horizontal (X) ---
         let margenIzca = 200;
         let endX = canvas.width - 100;
-        let espacioX = (endX - margenIzca) / (lickActual.length - 1);
-        let xBase = margenIzca + (indiceNotaObjetivo * espacioX);
-        ctx.fillStyle = 'rgba(0, 191, 255, 0.2)'; 
-        ctx.strokeStyle = COLOR_USER; ctx.lineWidth = 3; ctx.shadowBlur = 20; ctx.shadowColor = COLOR_USER;
-        ctx.beginPath(); ctx.ellipse(xBase, y, 22, 16, 0, 0, 2 * Math.PI); ctx.fill(); ctx.stroke(); 
-        ctx.shadowBlur = 0; 
-        ctx.fillStyle = COLOR_USER;
-        ctx.beginPath(); ctx.ellipse(xBase, y, 5, 5, 0, 0, 2 * Math.PI); ctx.fill();
-        if (datos.ledger) {
-            ctx.strokeStyle = 'rgba(100, 100, 100, 0.4)'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(xBase - 35, y); ctx.lineTo(xBase + 35, y); ctx.stroke();
+        let xBase = 0;
+
+        if (modoImproCambios) {
+            // En modo impro, aparece en el primer compás como referencia
+            xBase = 150 + 20; 
+        } else {
+            // En modo lectura, sigue horizontalmente a la nota naranja objetivo para comparar
+            let espacioX = (endX - margenIzca) / (lickActual.length - 1);
+            xBase = margenIzca + (indiceNotaObjetivo * espacioX);
         }
+
+        // --- Configuración de Estilo Neón Azul ---
+        ctx.fillStyle = COLOR_USER;
+        ctx.strokeStyle = COLOR_USER;
+        ctx.lineWidth = 3;
+        ctx.shadowBlur = 15; // Brillo de neón
+        ctx.shadowColor = COLOR_USER;
+
+        // --- 1. Dibujar Cabeza de la Nota (Óvalo Sólido) ---
+        ctx.beginPath();
+        ctx.ellipse(xBase, y, 15, 10, 0, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // --- 2. Dibujar Líneas adicionales (Ledger lines) fantasma si se requieren ---
+        if (datos.ledger) {
+            ctx.shadowBlur = 0; // No brillar las líneas grises
+            ctx.strokeStyle = 'rgba(100, 100, 100, 0.4)'; // Gris tenue
+            ctx.lineWidth = 2;
+            ctx.beginPath(); 
+            ctx.moveTo(xBase - 25, y); 
+            ctx.lineTo(xBase + 25, y); 
+            ctx.stroke();
+            
+            // Restaurar estilos de neón para la plica
+            ctx.shadowBlur = 15;
+            ctx.strokeStyle = COLOR_USER;
+            ctx.lineWidth = 3;
+        }
+
+        // --- 3. Dibujar Plica (Palo), calculando dirección estándar ---
+        let stemUp = true;
+        // Regla: si nota <= 3ª línea del staff (Si4 en G, Re3 en F), palo arriba.
+        if (datos.clef === 'G') { 
+            if (y <= 240) stemUp = false; // Si4 (240) o más alto = palo abajo
+        } else { 
+            if (y <= 360) stemUp = false; // Re3 (360) o más alto = palo abajo
+        }
+
+        ctx.beginPath();
+        if (stemUp) {
+            // Palo hacia arriba sale del lado derecho de la cabeza
+            ctx.moveTo(xBase + 13, y);
+            ctx.lineTo(xBase + 13, y - 50);
+        } else {
+            // Palo hacia abajo sale del lado izquierdo de la cabeza
+            ctx.moveTo(xBase - 13, y);
+            ctx.lineTo(xBase - 13, y + 50);
+        }
+        ctx.stroke();
+
+        // --- 4. Dibujar Alteración (Bemol 'b') si la nota detectada la tiene ---
+        if (datos.alt === 'b') {
+            ctx.font = '30px serif';
+            // Ajustar texto baseline para bemoles gráficos
+            ctx.textBaseline = 'alphabetic'; 
+            ctx.fillText("b", xBase - 35, y + 10);
+            // Restaurar baseline por defecto del canvas
+            ctx.textBaseline = 'bottom'; 
+        }
+
+        // --- Restablecer sombra final ---
+        ctx.shadowBlur = 0; 
     }
 }
 
-// --- LÓGICA DE JUEGO ---
+// --- LÓGICA DE JUEGO (Modo Lectura) ---
 function generarLickAleatorio(longitud=8) {
+    activarPanelesUI(false);
     if (longitud < 2) longitud = 2;
     lickActual = [];
-    lickActual.push(POOL_NOTAS_JAZZ[Math.floor(Math.random() * POOL_NOTAS_JAZZ.length)]);
+    lickActual.push(POOL_NOTAS_LIGADAS[Math.floor(Math.random() * POOL_NOTAS_LIGADAS.length)]);
     for (let i = 1; i < longitud; i++) {
         let notaAnterior = lickActual[i-1];
-        let idxAnterior = POOL_NOTAS_JAZZ.indexOf(notaAnterior);
-        if (idxAnterior === -1) { lickActual.push(POOL_NOTAS_JAZZ[Math.floor(Math.random() * POOL_NOTAS_JAZZ.length)]); continue; }
+        let idxAnterior = POOL_NOTAS_LIGADAS.indexOf(notaAnterior);
+        if (idxAnterior === -1) { lickActual.push(POOL_NOTAS_LIGADAS[Math.floor(Math.random() * POOL_NOTAS_LIGADAS.length)]); continue; }
         let maxJump = 3;
         let minIdx = Math.max(0, idxAnterior - maxJump);
-        let maxIdx = Math.min(POOL_NOTAS_JAZZ.length - 1, idxAnterior + maxJump);
+        let maxIdx = Math.min(POOL_NOTAS_LIGADAS.length - 1, idxAnterior + maxJump);
         let allowedIdxPool = [];
         for (let j=minIdx; j<=maxIdx; j++) { if (j !== idxAnterior) allowedIdxPool.push(j); }
         if (allowedIdxPool.length === 0) allowedIdxPool = [idxAnterior];
-        lickActual.push(POOL_NOTAS_JAZZ[allowedIdxPool[Math.floor(Math.random() * allowedIdxPool.length)]]);
+        lickActual.push(POOL_NOTAS_LIGADAS[allowedIdxPool[Math.floor(Math.random() * allowedIdxPool.length)]]);
     }
     indiceNotaObjetivo = 0;
-    lickCompletado = false; // Reset estado al generar nueva
     updateTargetLabel();
-    // Reset colores texto UI
-    detectedNoteLabel.style.color = COLOR_USER; 
 }
 
 function updateTargetLabel() {
     if (lickActual.length > 0) { targetNoteLabel.innerText = `[ ${lickActual[indiceNotaObjetivo]} ]`; }
+}
+
+// --- NUEVA LÓGICA DE IMPROVISACIÓN (Modo Cambios Jazz) ---
+function iniciarModoImpro() {
+    activarPanelesUI(true);
+    const progresiones = DATOS_IMPRO_JAZZ.progresiones;
+    progresionActual = progresiones[Math.floor(Math.random() * progresiones.length)];
+    const ejemplos = progresionActual.ejemplos;
+    ejemploActual = ejemplos[Math.floor(Math.random() * ejemplos.length)];
+    labelProgImpro.innerText = progresionActual.nombre;
+    labelClaveImpro.innerText = ejemploActual.tono;
+    labelEscalaImpro.innerText = ejemploActual.estructura_canvas[0].escala_sugerida;
+    console.log(`Iniciando Impro: ${progresionActual.nombre} en ${ejemploActual.tono}`);
+}
+
+function activarPanelesUI(esImpro) {
+    modoImproCambios = esImpro;
+    if (esImpro) {
+        panelGame.style.display = 'none';
+        panelImpro.style.display = 'block';
+    } else {
+        panelGame.style.display = 'block';
+        panelImpro.style.display = 'none';
+    }
 }
 
 // --- BUCLE PRINCIPAL ( gameLoop ) ---
@@ -325,35 +510,18 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
     dibujarGrandStaff();
     dibujarMarcadorUsuario(); 
-    dibujarLick();
-
-    // LÓGICA DE JUEGO ACTUALIZADA PARA FINALIZACIÓN
-    if (lickCompletado) {
-        // ESTAMOS EN PAUSA DE FEEDBACK DE ÉXITO
-        ticksDelayCompletado--;
-        if (ticksDelayCompletado <= 0) {
-            generarLickAleatorio(); // PASAR A LA SIGUIENTE FRASE AUTOMÁTICAMENTE
-        }
-    } else if (cooldownTicks > 0) {
-        cooldownTicks--;
+    if (modoImproCambios) {
+        dibujarCambiosJazz();
     } else {
-        // VERIFICAR ACIERTO DE LA NOTA OBJETIVO ACTUAL
-        if (lickActual.length > 0 && detectedNoteName === lickActual[indiceNotaObjetivo]) {
-            indiceNotaObjetivo++;
-            cooldownTicks = 25; 
-            
-            if (indiceNotaObjetivo >= lickActual.length) {
-                // !!! HE ACERTADO TODAS LAS NOTAS !!!
-                lickCompletado = true;
-                ticksDelayCompletado = 60; // Pausa de 2 segundos a 30 FPS (aprox)
-                
-                // Visual feedback en etiquetas de texto
-                targetNoteLabel.innerText = "¡EXCELENTE!";
-                detectedNoteLabel.innerText = "[ FRASE COMPLETADA ]";
-                detectedNoteLabel.style.color = COLOR_PLAYED; // Texto Verde Neón
-            } else {
-                // Aún quedan notas, pasar a la siguiente nota dentro del mismo lick
-                updateTargetLabel();
+        dibujarLick();
+        if (cooldownTicks > 0) {
+            cooldownTicks--;
+        } else {
+            if (lickActual.length > 0 && detectedNoteName === lickActual[indiceNotaObjetivo]) {
+                indiceNotaObjetivo++;
+                cooldownTicks = 25; 
+                if (indiceNotaObjetivo >= lickActual.length) { generarLickAleatorio(); } 
+                else { updateTargetLabel(); }
             }
         }
     }
@@ -364,7 +532,15 @@ function gameLoop() {
 btnStart.addEventListener('click', iniciarMicrofono);
 btnStop.addEventListener('click', detenerMicrofono); 
 btnNewLick.addEventListener('click', () => generarLickAleatorio());
-document.addEventListener('keydown', (event) => { if (event.code === 'Space') { event.preventDefault(); generarLickAleatorio(); } });
+btnImpro.addEventListener('click', iniciarModoImpro);
+document.addEventListener('keydown', (event) => { 
+    if (event.code === 'Space') { 
+        event.preventDefault(); generarLickAleatorio(); 
+    }
+    if (event.code === 'KeyI') { 
+        iniciarModoImpro();
+    }
+});
 
 // --- INICIALIZACIÓN ---
 generarLickAleatorio(); 

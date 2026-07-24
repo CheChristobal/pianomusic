@@ -75,6 +75,12 @@ h1 {
     gap: 12px;
 }
 
+.separator {
+    height: 2px;
+    background-color: #333;
+    margin: 5px 0;
+}
+
 button {
     border: none;
     padding: 15px 20px;
@@ -88,7 +94,6 @@ button {
     outline: none;
 }
 
-/* Botón Activar (Azul) */
 .btn-glow-blue {
     background-color: #0056b3;
     color: white;
@@ -100,7 +105,6 @@ button {
     transform: translateY(-2px);
 }
 
-/* Botón Nueva Frase (Naranja) */
 .btn-glow-orange {
     background-color: #ca6f1e;
     color: white;
@@ -112,15 +116,25 @@ button {
     transform: translateY(-2px);
 }
 
-/* NUEVO: Botón Quitar (Rojo/Magenta) */
 .btn-glow-red {
     background-color: #a93226;
     color: white;
     box-shadow: 0 0 10px rgba(169, 50, 38, 0.5);
 }
 .btn-glow-red:hover:not(:disabled) {
-    background-color: #ff0055; /* Magenta brillante */
+    background-color: #ff0055;
     box-shadow: 0 0 20px rgba(255, 0, 85, 0.8);
+    transform: translateY(-2px);
+}
+
+.btn-glow-purple {
+    background-color: #6c3483;
+    color: white;
+    box-shadow: 0 0 10px rgba(108, 52, 131, 0.5);
+}
+.btn-glow-purple:hover:not(:disabled) {
+    background-color: #bf55ec;
+    box-shadow: 0 0 20px rgba(191, 85, 236, 0.8);
     transform: translateY(-2px);
 }
 
@@ -161,8 +175,14 @@ button:disabled {
 }
 
 .target-note {
-    font-size: 36px;
+    font-size: 30px;
     color: #ff9f43;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     text-shadow: 0 0 15px rgba(255, 159, 67, 0.7);
+}
+
+.scale-suggestion {
+    color: #bf55ec;
+    text-shadow: 0 0 10px rgba(191, 85, 236, 0.5);
+    font-size: 18px;
 }

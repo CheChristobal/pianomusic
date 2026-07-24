@@ -21,9 +21,10 @@
         <div class="controls-feedback-container">
             <div class="panel-control">
                 <button id="btn-start" class="btn-glow-blue">1. Activar Micrófono</button>
-                <!-- NUEVO BOTÓN: Quitar Micrófono -->
                 <button id="btn-stop" class="btn-glow-red" disabled>2. Quitar Micrófono</button>
-                <button id="btn-new-lick" class="btn-glow-orange">3. Nueva Frase (Espacio)</button>
+                <div class="separator"></div>
+                <button id="btn-new-lick" class="btn-glow-orange">Modo Lectura (Espacio)</button>
+                <button id="btn-impro" class="btn-glow-purple">Modo Impro Cambios (I)</button>
             </div>
 
             <div class="panel-feedback">
@@ -31,9 +32,23 @@
                     <div class="label">Tu Nota (Azul):</div>
                     <div class="value"><span id="freq-hz">0.0</span> Hz <span id="nota-detectada" class="user-note">[ --- ]</span></div>
                 </div>
-                <div class="feedback-item">
-                    <div class="label">Objetivo (Naranja):</div>
-                    <div class="value target-note"><span id="nota-buscada-label">[ Do4 ]</span></div>
+                
+                <div id="game-info">
+                    <div class="feedback-item">
+                        <div class="label">Objetivo (Naranja):</div>
+                        <div class="value target-note"><span id="nota-buscada-label">[ Do4 ]</span></div>
+                    </div>
+                </div>
+                
+                <div id="impro-info" style="display: none;">
+                    <div class="feedback-item">
+                        <div class="label">Progresión Actual: <span id="nombre-progresion" style="color:white;">---</span></div>
+                        <div class="value target-note">Clave: <span id="clave-progresion" style="color:white;">---</span></div>
+                    </div>
+                    <div class="feedback-item">
+                        <div class="label">Escala Sugerida:</div>
+                        <div class="value scale-suggestion" id="escala-sugerida">---</div>
+                    </div>
                 </div>
             </div>
         </div>
